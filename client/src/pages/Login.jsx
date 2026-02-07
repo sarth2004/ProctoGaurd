@@ -26,85 +26,95 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4">
+        <div className="min-h-screen flex items-center justify-center bg-white text-gray-900 px-4">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20"
+                transition={{ duration: 0.4 }}
+                className="w-full max-w-md bg-gray-50 rounded-xl p-8 border border-gray-200 shadow-2xl shadow-gray-200/50"
             >
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
                         Exam Portal
                     </h2>
-                    <p className="text-gray-400 mt-2">Sign in to continue</p>
+                    <p className="text-gray-500 mt-2 text-sm uppercase tracking-wider font-semibold">Sign in to continue</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
-                            required
-                        />
-                    </div>
-
-                    <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
-                            required
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsAdminLogin(!isAdminLogin)}>
-                        <div className={`w-5 h-5 rounded border border-gray-500 flex items-center justify-center ${isAdminLogin ? 'bg-purple-600 border-purple-600' : ''}`}>
-                            {isAdminLogin && <div className="w-3 h-3 bg-white rounded-sm" />}
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-500 uppercase ml-1">Email Address</label>
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                            <input
+                                type="email"
+                                placeholder="name@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-white border border-gray-200 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-blue-600 transition-all text-sm text-gray-900 placeholder:text-gray-300 shadow-sm"
+                                required
+                            />
                         </div>
-                        <span className="text-sm text-gray-400">Login as Admin</span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-400 uppercase ml-1">Password</label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-white border border-gray-200 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-blue-600 transition-all text-sm text-gray-900 placeholder:text-gray-300 shadow-sm"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 py-1 px-1 group cursor-pointer" onClick={() => setIsAdminLogin(!isAdminLogin)}>
+                        <div className={`w-5 h-5 rounded border transition-all flex items-center justify-center ${isAdminLogin ? 'bg-blue-600 border-blue-600 shadow-sm' : 'bg-white border-gray-300 group-hover:border-gray-400 shadow-sm'}`}>
+                            {isAdminLogin && <LogIn size={12} className="text-white" />}
+                        </div>
+                        <span className="text-sm font-medium text-gray-600">Login as Administrator</span>
                     </div>
 
                     {isAdminLogin && (
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
-                            className="relative"
+                            className="space-y-1.5 pt-1"
                         >
-                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400" size={20} />
-                            <input
-                                type="password"
-                                placeholder="Admin Secret Key"
-                                value={secretKey}
-                                onChange={(e) => setSecretKey(e.target.value)}
-                                className="w-full bg-purple-900/20 border border-purple-500/50 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-purple-500 transition-colors text-purple-100 placeholder-purple-300/50"
-                                required
-                            />
+                            <label className="text-xs font-bold text-blue-600 uppercase ml-1">Admin Secret Key</label>
+                            <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-600" size={18} />
+                                <input
+                                    type="password"
+                                    placeholder="Enter secret key"
+                                    value={secretKey}
+                                    onChange={(e) => setSecretKey(e.target.value)}
+                                    className="w-full bg-white border border-blue-200 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-blue-600 transition-all text-sm text-blue-700 placeholder-blue-300 shadow-sm"
+                                    required
+                                />
+                            </div>
                         </motion.div>
                     )}
 
                     <button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-blue-600/20 text-sm uppercase tracking-widest mt-2 active:scale-[0.98]"
                     >
-                        <LogIn size={20} />
                         Sign In
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-gray-400">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-blue-400 hover:underline">
-                        Register
-                    </Link>
-                </p>
+                <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                    <p className="text-sm text-gray-500">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-blue-600 hover:text-blue-500 font-bold ml-1">
+                            Create Account
+                        </Link>
+                    </p>
+                </div>
             </motion.div>
         </div>
     );

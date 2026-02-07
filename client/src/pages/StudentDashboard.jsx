@@ -50,23 +50,23 @@ export default function StudentDashboard() {
 
     if (user?.isBlocked) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center p-6 text-center">
+            <div className="min-h-screen bg-white flex items-center justify-center p-6 text-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-md w-full bg-gray-900 border border-red-500/30 p-10 rounded-3xl"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="max-w-md w-full bg-gray-50 border border-red-100 p-10 rounded-xl shadow-2xl shadow-red-500/10"
                 >
-                    <div className="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="w-20 h-20 bg-red-600/5 text-red-600 rounded-lg flex items-center justify-center mx-auto mb-6 border border-red-600/10 shadow-sm">
                         <ShieldOff size={40} />
                     </div>
-                    <h2 className="text-3xl font-bold mb-4 text-red-500">Account Blocked</h2>
-                    <p className="text-gray-400 mb-8">
-                        Your account has been restricted by the administrator due to policy violations.
-                        Please contact your instructor or the technical support team.
+                    <h2 className="text-2xl font-bold mb-4 text-gray-900 uppercase tracking-tight">Security Restriction</h2>
+                    <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">
+                        Your access to the portal has been restricted by the administration.
+                        Please contact technical support if you believe this is an error.
                     </p>
                     <button
                         onClick={logout}
-                        className="w-full bg-gray-800 hover:bg-gray-700 py-4 rounded-xl font-bold transition-colors"
+                        className="w-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-sm"
                     >
                         Sign Out
                     </button>
@@ -76,114 +76,131 @@ export default function StudentDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white p-6">
+        <div className="min-h-screen bg-white text-gray-900 p-6">
             {/* Header */}
-            <header className="flex justify-between items-center mb-10 pb-6 border-b border-gray-800">
+            <header className="flex justify-between items-center mb-10 pb-6 border-b border-gray-100">
                 <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                        Student Portal
+                    <h1 className="text-2xl font-bold text-gray-900 uppercase tracking-tight">
+                        Assessment Portal
                     </h1>
-                    <p className="text-gray-400">Welcome, {user?.name}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                        <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest leading-none">Session Active: {user?.name}</p>
+                    </div>
                 </div>
                 <button
                     onClick={logout}
-                    className="flex items-center gap-2 bg-red-500/10 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500/20 transition-colors"
+                    className="flex items-center gap-2 bg-gray-50 text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-all text-[10px] font-bold uppercase tracking-widest shadow-sm"
                 >
-                    <LogOut size={18} /> Logout
+                    <LogOut size={14} /> Terminate
                 </button>
             </header>
 
             <div className="max-w-4xl mx-auto mt-20 text-center">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gray-900/50 border border-gray-800 p-10 rounded-3xl shadow-2xl backdrop-blur-md"
+                    className="bg-gray-50 border border-gray-200 p-10 rounded-xl shadow-2xl shadow-gray-200/50"
                 >
-                    <div className="w-20 h-20 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <Key size={40} />
+                    <div className="w-16 h-16 bg-blue-600/5 text-blue-600 rounded border border-blue-600/10 flex items-center justify-center mx-auto mb-6 shadow-sm">
+                        <Key size={32} />
                     </div>
-                    <h2 className="text-3xl font-bold mb-4">Enter Exam Key</h2>
-                    <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                        Please enter the unique alphanumeric key provided by your instructor to start your examination.
+                    <h2 className="text-2xl font-bold mb-2 text-gray-900 uppercase tracking-tight">Access Assessment</h2>
+                    <p className="text-gray-500 text-xs mb-8 max-w-md mx-auto font-bold uppercase tracking-widest">
+                        Input the secure alphanumeric token provided by your supervisor.
                     </p>
 
                     <form onSubmit={handleJoinExam} className="max-w-md mx-auto space-y-4">
-                        <input
-                            type="text"
-                            placeholder="E.g. A1B2C3"
-                            value={examKey}
-                            onChange={(e) => setExamKey(e.target.value.toUpperCase())}
-                            className="w-full bg-black border border-gray-700 rounded-xl py-4 px-6 text-center text-2xl font-mono tracking-[0.5em] focus:border-blue-500 outline-none transition-all placeholder:tracking-normal placeholder:text-gray-700"
-                            required
-                        />
+                        <div className="relative group">
+                            <input
+                                type="text"
+                                placeholder="X X X X X X"
+                                value={examKey}
+                                onChange={(e) => setExamKey(e.target.value.toUpperCase())}
+                                className="w-full bg-white border border-gray-200 rounded-xl py-5 px-6 text-center text-3xl font-mono tracking-[0.5em] focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 outline-none transition-all placeholder:tracking-normal placeholder:text-gray-200 text-blue-600 shadow-sm"
+                                required
+                            />
+                        </div>
                         <button
                             disabled={joining}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-blue-900/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-[0.2em] shadow-lg shadow-blue-600/20 transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50"
                         >
-                            {joining ? 'Verifying...' : (
+                            {joining ? 'Authenticating...' : (
                                 <>
-                                    <Play size={20} fill="currentColor" /> Start Exam
+                                    <Play size={16} fill="currentColor" /> Initialize Assessment
                                 </>
                             )}
                         </button>
                     </form>
 
-                    <div className="mt-10 grid grid-cols-2 gap-4 text-left">
-                        <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                            <Clock size={20} className="text-blue-400 mb-2" />
-                            <h4 className="font-semibold text-sm">Strict Timing</h4>
-                            <p className="text-xs text-gray-500 mt-1">Exams have fixed timers. Auto-submit on expiry.</p>
+                    <div className="mt-12 grid grid-cols-2 gap-4 text-left">
+                        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Clock size={16} className="text-blue-600" />
+                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-900">Chronometer Mode</h4>
+                            </div>
+                            <p className="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-wider">Fixed duration protocol. Auto-submission enforced upon expiry.</p>
                         </div>
-                        <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                            <Shield size={20} className="text-purple-400 mb-2" />
-                            <h4 className="font-semibold text-sm">AI Proctoring</h4>
-                            <p className="text-xs text-gray-500 mt-1">Movement and tab switching is monitored.</p>
+                        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Shield size={16} className="text-purple-600" />
+                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-900">Proctor Guard</h4>
+                            </div>
+                            <p className="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-wider">Atmosphere and browser integrity monitored by AI engine.</p>
                         </div>
                     </div>
                 </motion.div>
             </div>
 
             {/* Exam History Section */}
-            <div className="max-w-6xl mx-auto mt-20">
-                <div className="flex items-center gap-3 mb-8">
-                    <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
-                        <FileText size={24} />
+            <div className="max-w-6xl mx-auto mt-24 mb-12">
+                <div className="flex items-center justify-between mb-10 pb-4 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-600/5 rounded border border-blue-600/10 text-blue-600 shadow-sm">
+                            <FileText size={20} />
+                        </div>
+                        <h2 className="text-xl font-bold text-gray-900 uppercase tracking-tight">Academic History</h2>
                     </div>
-                    <h2 className="text-2xl font-bold">Your Exam History</h2>
+                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{history.length} Completed Records</p>
                 </div>
 
                 {history.length === 0 ? (
-                    <div className="bg-gray-900/30 border border-gray-800 rounded-3xl p-12 text-center text-gray-500">
-                        You haven't attempted any exams yet.
+                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-20 text-center text-gray-400 italic font-medium">
+                        No examination records found in the database.
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {history.map((record) => (
                             <motion.div
                                 key={record._id}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="bg-gray-900/50 border border-gray-800 p-6 rounded-2xl hover:border-gray-700 transition-colors"
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="bg-white border border-gray-200 p-6 rounded-xl hover:border-blue-500 transition-all group relative overflow-hidden shadow-sm"
                             >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <h3 className="font-bold text-lg truncate mb-1">{record.examId?.title || 'Unknown Exam'}</h3>
-                                        <p className="text-xs text-gray-500">{new Date(record.submittedAt).toLocaleDateString()} at {new Date(record.submittedAt).toLocaleTimeString()}</p>
-                                    </div>
-                                    <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${record.status === 'Pass' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
-                                        }`}>
-                                        {record.status}
-                                    </div>
+                                <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
+                                    <div className={`absolute top-0 right-0 w-full h-full opacity-[0.05] ${record.status === 'Pass' ? 'bg-green-500' : 'bg-red-500'}`} />
                                 </div>
 
-                                <div className="bg-black/50 p-4 rounded-xl border border-gray-800 mb-6 grid grid-cols-2 gap-2 text-center">
-                                    <div>
-                                        <p className="text-[10px] text-gray-500 uppercase font-bold">Score</p>
-                                        <p className="text-xl font-bold text-blue-400">{record.score} / {record.totalPossibleScore || record.totalQuestions}</p>
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="flex-1 min-w-0 pr-4">
+                                        <h3 className="font-bold text-gray-900 text-base truncate uppercase tracking-tight group-hover:text-blue-600 transition-colors">{record.examId?.title || 'Unknown Exam'}</h3>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                                            {new Date(record.submittedAt).toLocaleDateString()} at {new Date(record.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
                                     </div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-500 uppercase font-bold">Violations</p>
-                                        <p className="text-xl font-bold text-red-400">{record.violations?.length || 0}</p>
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${record.status === 'Pass' ? 'bg-green-600/5 text-green-600 border-green-600/10' : 'bg-red-600/5 text-red-600 border-red-600/10'}`}>
+                                        {record.status}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 text-center shadow-sm">
+                                        <p className="text-[9px] text-gray-400 uppercase font-bold tracking-widest mb-1">Score</p>
+                                        <p className="text-lg font-bold text-blue-600 font-mono">{record.score} <span className="text-xs text-gray-400">/ {record.totalPossibleScore || record.totalQuestions}</span></p>
+                                    </div>
+                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 text-center shadow-sm">
+                                        <p className="text-[9px] text-gray-400 uppercase font-bold tracking-widest mb-1">Alerts</p>
+                                        <p className={`text-lg font-bold font-mono ${record.violations?.length > 0 ? 'text-red-500' : 'text-gray-300'}`}>{record.violations?.length || 0}</p>
                                     </div>
                                 </div>
 
@@ -192,9 +209,9 @@ export default function StudentDashboard() {
                                         setSelectedHistory(record);
                                         setShowReviewModal(true);
                                     }}
-                                    className="w-full bg-gray-800 hover:bg-gray-700 py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2"
+                                    className="w-full bg-gray-50 text-gray-600 border border-gray-200 hover:bg-blue-600 hover:border-blue-600 hover:text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
                                 >
-                                    Review Answers <ChevronRight size={16} />
+                                    Review Report <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
                                 </button>
                             </motion.div>
                         ))}
@@ -205,24 +222,28 @@ export default function StudentDashboard() {
             {/* Review Answers Modal */}
             <AnimatePresence>
                 {showReviewModal && selectedHistory && (
-                    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, scale: 0.98 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-gray-900 border border-gray-800 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl flex flex-col shadow-2xl"
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            className="bg-white border border-gray-200 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-xl flex flex-col shadow-2xl"
                         >
-                            <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900/50">
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white">
                                 <div>
-                                    <h3 className="text-xl font-bold">{selectedHistory.examId?.title} - Review</h3>
-                                    <p className="text-sm text-gray-500">Score: {selectedHistory.score} / {selectedHistory.totalPossibleScore || selectedHistory.totalQuestions}</p>
+                                    <h3 className="text-xl font-bold text-gray-900 uppercase tracking-tight">Assessment Review</h3>
+                                    <div className="flex items-center gap-3 mt-1">
+                                        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-none">{selectedHistory.examId?.title}</p>
+                                        <span className="w-1 h-1 rounded-full bg-gray-200" />
+                                        <p className="text-blue-600 text-[10px] font-bold uppercase tracking-widest leading-none">Score: {selectedHistory.score} / {selectedHistory.totalPossibleScore || selectedHistory.totalQuestions}</p>
+                                    </div>
                                 </div>
-                                <button onClick={() => setShowReviewModal(false)} className="text-gray-400 hover:text-white p-2">
-                                    <X size={24} />
+                                <button onClick={() => setShowReviewModal(false)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-400 hover:text-gray-900">
+                                    <X size={20} />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-6 space-y-6 text-left">
+                            <div className="flex-1 overflow-y-auto p-8 space-y-10 text-left bg-gray-50/50">
                                 {selectedHistory.examId?.questions.map((q, idx) => {
                                     const studentAns = selectedHistory.answers[idx];
                                     const isMSQ = q.type === 'MSQ';
@@ -239,60 +260,71 @@ export default function StudentDashboard() {
                                     }
 
                                     return (
-                                        <div key={idx} className="bg-black/30 border border-gray-800 p-6 rounded-2xl">
-                                            <div className="flex justify-between items-start gap-4 mb-4">
-                                                <div>
-                                                    <div className="flex items-center gap-2 mb-1">
-                                                        <span className="text-[10px] bg-gray-800 px-2 py-0.5 rounded text-gray-400 font-bold uppercase">{q.type || 'MCQ'}</span>
-                                                        <span className="text-[10px] bg-blue-500/10 px-2 py-0.5 rounded text-blue-400 font-bold uppercase">{q.weightage || 1} Mark</span>
+                                        <div key={idx} className="bg-white border border-gray-200 p-8 rounded-xl shadow-sm relative group">
+                                            <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none">
+                                                <div className={`absolute top-0 right-0 w-full h-full opacity-[0.03] ${isCorrect ? 'bg-green-500' : 'bg-red-500'}`} />
+                                            </div>
+
+                                            <div className="flex justify-between items-start gap-6 mb-8">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-4">
+                                                        <span className="text-[9px] bg-gray-50 border border-gray-200 px-2 py-0.5 rounded text-gray-400 font-bold uppercase tracking-widest">{q.type || 'MCQ'}</span>
+                                                        <span className="text-[9px] bg-blue-600/5 border border-blue-600/10 px-2 py-0.5 rounded text-blue-600 font-bold uppercase tracking-widest">{q.weightage || 1} Pts</span>
+                                                        <span className="text-[9px] text-gray-300 font-mono font-bold uppercase ml-2">Question ID: #{idx + 1}</span>
                                                     </div>
-                                                    <h4 className="font-semibold text-lg">{idx + 1}. {q.questionText}</h4>
+                                                    <h4 className="font-bold text-lg text-gray-900 leading-relaxed uppercase tracking-tight">{q.questionText}</h4>
                                                 </div>
                                                 {isCorrect ? (
-                                                    <div className="flex items-center gap-1 text-green-500 text-xs font-bold bg-green-500/10 px-2 py-1 rounded shrink-0">
-                                                        <CheckCircle2 size={14} /> Correct
+                                                    <div className="flex items-center gap-2 text-green-600 text-[10px] font-bold uppercase tracking-widest bg-green-600/5 border border-green-600/10 px-4 py-2 rounded shrink-0 shadow-sm">
+                                                        <CheckCircle2 size={14} /> Validated
                                                     </div>
                                                 ) : (
-                                                    <div className="flex items-center gap-1 text-red-500 text-xs font-bold bg-red-500/10 px-2 py-1 rounded shrink-0">
-                                                        <XCircle size={14} /> Incorrect
+                                                    <div className="flex items-center gap-2 text-red-600 text-[10px] font-bold uppercase tracking-widest bg-red-600/5 border border-red-600/10 px-4 py-2 rounded shrink-0 shadow-sm">
+                                                        <XCircle size={14} /> Failed
                                                     </div>
                                                 )}
                                             </div>
 
                                             {q.type === 'Coding' && (
-                                                <div className="space-y-4">
-                                                    <div className="bg-black/50 p-4 rounded-xl border border-gray-800">
-                                                        <p className="text-[10px] text-gray-500 uppercase font-bold mb-2">Student Submission</p>
-                                                        <pre className="text-sm font-mono text-blue-300 whitespace-pre-wrap bg-black/30 p-4 rounded-lg">
-                                                            {studentAns || '(No Answer Provided)'}
+                                                <div className="space-y-6">
+                                                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                                        <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                                                            <p className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Submitted Syntax</p>
+                                                            <div className="w-2 h-2 rounded-full bg-blue-600" />
+                                                        </div>
+                                                        <pre className="text-sm font-mono text-blue-600 whitespace-pre-wrap bg-white p-6 rounded-lg border border-gray-100 shadow-inner">
+                                                            {studentAns || '(No Input Detected)'}
                                                         </pre>
                                                     </div>
 
-                                                    <div className="space-y-3">
-                                                        <p className="text-xs font-bold text-gray-500 uppercase">Automated Grading Results</p>
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                            {(q.testCases || []).map((tc, tcIdx) => {
-                                                                // Note: Since we can't rerun code here without another API, 
-                                                                // we just show the test cases and mark passed if everything matched in backend
-                                                                return (
-                                                                    <div key={tcIdx} className="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50">
-                                                                        <div className="flex justify-between items-center mb-1">
-                                                                            <span className="text-[9px] text-gray-500 font-bold uppercase">Test Case {tcIdx + 1} {tc.isPublic ? '(Public)' : '(Hidden)'}</span>
+                                                    <div className="space-y-4">
+                                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest ml-1">Test Suite Analytics</p>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                            {(q.testCases || []).map((tc, tcIdx) => (
+                                                                <div key={tcIdx} className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 group/tc hover:border-blue-200 transition-all shadow-sm">
+                                                                    <div className="flex justify-between items-center mb-4">
+                                                                        <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Case {tcIdx + 1} • {tc.isPublic ? 'Visible' : 'Encrypted'}</span>
+                                                                        <div className="w-1.5 h-1.5 rounded-full bg-gray-200" />
+                                                                    </div>
+                                                                    <div className="text-[10px] font-mono space-y-2">
+                                                                        <div className="flex items-start gap-2">
+                                                                            <span className="text-gray-500 font-bold w-12 shrink-0">INPUT:</span>
+                                                                            <span className="text-gray-400 break-all">{tc.input || '(Empty)'}</span>
                                                                         </div>
-                                                                        <div className="text-[10px] font-mono space-y-1">
-                                                                            <p className="text-gray-500">Input: <span className="text-gray-400">{tc.input || '(None)'}</span></p>
-                                                                            <p className="text-gray-500">Expected: <span className="text-green-500">{tc.output}</span></p>
+                                                                        <div className="flex items-start gap-2">
+                                                                            <span className="text-gray-500 font-bold w-12 shrink-0">TARGET:</span>
+                                                                            <span className="text-green-600 break-all">{tc.output}</span>
                                                                         </div>
                                                                     </div>
-                                                                );
-                                                            })}
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 </div>
                                             )}
 
                                             {q.type !== 'Coding' && (
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     {q.options.map((option, optIdx) => {
                                                         const isSelected = isMSQ
                                                             ? (Array.isArray(studentAns) && studentAns.includes(option))
@@ -305,16 +337,32 @@ export default function StudentDashboard() {
                                                         return (
                                                             <div
                                                                 key={optIdx}
-                                                                className={`p-3 rounded-xl border text-sm transition-all ${isCorrectOpt ? 'bg-green-500/10 border-green-500/50 text-green-400' :
-                                                                    isSelected ? 'bg-red-500/10 border-red-500/50 text-red-400' :
-                                                                        'bg-gray-800/20 border-gray-800 text-gray-500'
+                                                                className={`p-5 rounded-xl border transition-all relative overflow-hidden shadow-sm ${isCorrectOpt ? 'bg-green-600/5 border-green-600/20 text-green-600' :
+                                                                    isSelected ? 'bg-red-600/5 border-red-600/20 text-red-600' :
+                                                                        'bg-gray-50 border-gray-200 text-gray-500'
                                                                     }`}
                                                             >
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="opacity-50 font-mono">{String.fromCharCode(65 + optIdx)}.</span>
-                                                                    {option}
-                                                                    {isSelected && !isCorrectOpt && <span className="text-[10px] font-bold uppercase ml-auto">(Your Answer)</span>}
-                                                                    {isCorrectOpt && <span className="text-[10px] font-bold uppercase ml-auto">(Correct)</span>}
+                                                                <div className="flex items-center gap-4 relative z-10">
+                                                                    <span className={`w-6 h-6 flex items-center justify-center rounded border text-[10px] font-mono font-bold ${isCorrectOpt ? 'border-green-600/20 bg-green-600/10' :
+                                                                        isSelected ? 'border-red-600/20 bg-red-600/10' :
+                                                                            'border-gray-200 bg-white'
+                                                                        }`}>
+                                                                        {String.fromCharCode(65 + optIdx)}
+                                                                    </span>
+                                                                    <span className="text-sm font-bold uppercase tracking-tight">{option}</span>
+
+                                                                    {isSelected && (
+                                                                        <div className="ml-auto flex items-center gap-1.5">
+                                                                            {!isCorrectOpt && <span className="text-[8px] font-bold uppercase tracking-widest text-red-600/60">Mistake</span>}
+                                                                            <div className={`w-1 h-1 rounded-full ${isCorrectOpt ? 'bg-green-500' : 'bg-red-500'}`} />
+                                                                        </div>
+                                                                    )}
+                                                                    {isCorrectOpt && !isSelected && (
+                                                                        <div className="ml-auto flex items-center gap-1.5">
+                                                                            <span className="text-[8px] font-bold uppercase tracking-widest text-green-600/60">Expected</span>
+                                                                            <div className="w-1 h-1 rounded-full bg-green-500" />
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         );
