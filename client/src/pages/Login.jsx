@@ -35,7 +35,7 @@ export default function Login() {
             >
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                        Exam Portal
+                        Digitron Exam Portal
                     </h2>
                     <p className="text-gray-500 mt-2 text-sm uppercase tracking-wider font-semibold">Sign in to continue</p>
                 </div>
