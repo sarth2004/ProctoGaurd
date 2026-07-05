@@ -2,7 +2,32 @@
 
 @theme {
   --color-brand: #2563eb;
-  --color-background: #ffffff;
-  --color-surface: #f9fafb;
-  --color-border: #e5e7eb;
+  /* Dynamic Variable Mapping */
+  --color-background: var(--bg-main);
+  --color-surface: var(--bg-surface);
+  --color-border: var(--border-subtle);
+  --color-text-primary: var(--text-main);
+  --color-text-secondary: var(--text-muted);
+}
+
+:root {
+  --bg-main: #ffffff;
+  --bg-surface: #f9fafb;
+  --border-subtle: #e5e7eb;
+  --text-main: #111827;
+  --text-muted: #4B5563;
+}
+
+.dark {
+  --bg-main: #09090b;
+  --bg-surface: #18181b;
+  --border-subtle: #27272a;
+  --text-main: #ffffff;
+  --text-muted: #9ca3af;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary transition-colors duration-300;
+  }
 }

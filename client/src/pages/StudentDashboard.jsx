@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, Key, Clock, FileText, Play, CheckCircle2, XCircle, ChevronRight, X, ShieldOff } from 'lucide-react';
+import { LogOut, Key, Clock, FileText, Play, CheckCircle2, XCircle, ChevronRight, X, ShieldOff, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -50,63 +50,67 @@ export default function StudentDashboard() {
 
     if (user?.isBlocked) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center p-6 text-center">
+            <div className="min-h-screen bg-background flex items-center justify-center p-6 text-center">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="max-w-md w-full bg-gray-50 border border-red-100 p-10 rounded-xl shadow-2xl shadow-red-500/10"
+                    className="max-w-md w-full bg-surface border border-red-100 dark:border-red-900/30 p-10 rounded-xl shadow-2xl shadow-red-500/10"
                 >
                     <div className="w-20 h-20 bg-red-600/5 text-red-600 rounded-lg flex items-center justify-center mx-auto mb-6 border border-red-600/10 shadow-sm">
                         <ShieldOff size={40} />
                     </div>
-                    <h2 className="text-2xl font-bold mb-4 text-gray-900 uppercase tracking-tight">Security Restriction</h2>
-                    <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">
+                    <h2 className="text-2xl font-bold mb-4 text-text-primary uppercase tracking-tight">Security Restriction</h2>
+                    <p className="text-text-secondary text-sm mb-8 leading-relaxed font-medium">
                         Your access to the portal has been restricted by the administration.
                         Please contact technical support if you believe this is an error.
                     </p>
-                    <button
-                        onClick={logout}
-                        className="w-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-sm"
-                    >
-                        Sign Out
-                    </button>
+                    <div className="flex flex-col gap-4">
+                        <button
+                            onClick={logout}
+                            className="w-full bg-surface text-text-primary border border-border hover:bg-background py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-sm"
+                        >
+                            Sign Out
+                        </button>
+                    </div>
                 </motion.div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-white text-gray-900 p-6">
+        <div className="min-h-screen bg-background text-text-primary p-6">
             {/* Header */}
-            <header className="flex justify-between items-center mb-10 pb-6 border-b border-gray-100">
+            <header className="flex justify-between items-center mb-10 pb-6 border-b border-border">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 uppercase tracking-tight">
-                        Assessment Portal
+                    <h1 className="text-2xl font-extrabold text-text-primary uppercase tracking-tight">
+                        Examix
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
                         <div className="w-2 h-2 rounded-full bg-green-500" />
-                        <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest leading-none">Session Active: {user?.name}</p>
+                        <p className="text-text-secondary text-[10px] font-bold uppercase tracking-widest leading-none">Session Active: {user?.name}</p>
                     </div>
                 </div>
-                <button
-                    onClick={logout}
-                    className="flex items-center gap-2 bg-gray-50 text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-all text-[10px] font-bold uppercase tracking-widest shadow-sm"
-                >
-                    <LogOut size={14} /> Terminate
-                </button>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={logout}
+                        className="flex items-center gap-2 bg-surface text-text-secondary border border-border px-4 py-2 rounded-lg hover:bg-background hover:text-text-primary transition-all text-[10px] font-bold uppercase tracking-widest shadow-sm"
+                    >
+                        <LogOut size={14} /> Terminate
+                    </button>
+                </div>
             </header>
 
             <div className="max-w-4xl mx-auto mt-20 text-center">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gray-50 border border-gray-200 p-10 rounded-xl shadow-2xl shadow-gray-200/50"
+                    className="bg-surface border border-border p-10 rounded-xl shadow-2xl"
                 >
                     <div className="w-16 h-16 bg-blue-600/5 text-blue-600 rounded border border-blue-600/10 flex items-center justify-center mx-auto mb-6 shadow-sm">
                         <Key size={32} />
                     </div>
-                    <h2 className="text-2xl font-bold mb-2 text-gray-900 uppercase tracking-tight">Access Assessment</h2>
-                    <p className="text-gray-500 text-xs mb-8 max-w-md mx-auto font-bold uppercase tracking-widest">
+                    <h2 className="text-2xl font-bold mb-2 text-text-primary uppercase tracking-tight">Access Assessment</h2>
+                    <p className="text-text-secondary text-xs mb-8 max-w-md mx-auto font-bold uppercase tracking-widest">
                         Input the secure alphanumeric token provided by your supervisor.
                     </p>
 
@@ -117,7 +121,7 @@ export default function StudentDashboard() {
                                 placeholder="X X X X X X"
                                 value={examKey}
                                 onChange={(e) => setExamKey(e.target.value.toUpperCase())}
-                                className="w-full bg-white border border-gray-200 rounded-xl py-5 px-6 text-center text-3xl font-mono tracking-[0.5em] focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 outline-none transition-all placeholder:tracking-normal placeholder:text-gray-200 text-blue-600 shadow-sm"
+                                className="w-full bg-background border border-border rounded-xl py-5 px-6 text-center text-3xl font-mono tracking-[0.5em] focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 outline-none transition-all placeholder:tracking-normal placeholder:text-text-secondary/20 text-blue-600 shadow-sm"
                                 required
                             />
                         </div>
@@ -134,19 +138,19 @@ export default function StudentDashboard() {
                     </form>
 
                     <div className="mt-12 grid grid-cols-2 gap-4 text-left">
-                        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div className="bg-surface p-5 rounded-xl border border-border shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
                                 <Clock size={16} className="text-blue-600" />
-                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-900">Chronometer Mode</h4>
+                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-text-primary">Chronometer Mode</h4>
                             </div>
-                            <p className="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-wider">Fixed duration protocol. Auto-submission enforced upon expiry.</p>
+                            <p className="text-[10px] text-text-secondary font-bold leading-relaxed uppercase tracking-wider">Fixed duration protocol. Auto-submission enforced upon expiry.</p>
                         </div>
-                        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div className="bg-surface p-5 rounded-xl border border-border shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
                                 <Shield size={16} className="text-purple-600" />
-                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-900">Proctor Guard</h4>
+                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-text-primary">Proctor Guard</h4>
                             </div>
-                            <p className="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-wider">Atmosphere and browser integrity monitored by AI engine.</p>
+                            <p className="text-[10px] text-text-secondary font-bold leading-relaxed uppercase tracking-wider">Atmosphere and browser integrity monitored by AI engine.</p>
                         </div>
                     </div>
                 </motion.div>
@@ -154,18 +158,18 @@ export default function StudentDashboard() {
 
             {/* Exam History Section */}
             <div className="max-w-6xl mx-auto mt-24 mb-12">
-                <div className="flex items-center justify-between mb-10 pb-4 border-b border-gray-100">
+                <div className="flex items-center justify-between mb-10 pb-4 border-b border-border">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-600/5 rounded border border-blue-600/10 text-blue-600 shadow-sm">
                             <FileText size={20} />
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900 uppercase tracking-tight">Academic History</h2>
+                        <h2 className="text-xl font-bold text-text-primary uppercase tracking-tight">Academic History</h2>
                     </div>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{history.length} Completed Records</p>
+                    <p className="text-[10px] text-text-secondary font-bold uppercase tracking-widest">{history.length} Completed Records</p>
                 </div>
 
                 {history.length === 0 ? (
-                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-20 text-center text-gray-400 italic font-medium">
+                    <div className="bg-surface border border-border rounded-xl p-20 text-center text-text-secondary italic font-medium">
                         No examination records found in the database.
                     </div>
                 ) : (
@@ -175,7 +179,7 @@ export default function StudentDashboard() {
                                 key={record._id}
                                 initial={{ opacity: 0, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="bg-white border border-gray-200 p-6 rounded-xl hover:border-blue-500 transition-all group relative overflow-hidden shadow-sm"
+                                className="bg-surface border border-border p-6 rounded-xl hover:border-blue-500 transition-all group relative overflow-hidden shadow-sm"
                             >
                                 <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
                                     <div className={`absolute top-0 right-0 w-full h-full opacity-[0.05] ${record.status === 'Pass' ? 'bg-green-500' : 'bg-red-500'}`} />
@@ -183,8 +187,8 @@ export default function StudentDashboard() {
 
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="flex-1 min-w-0 pr-4">
-                                        <h3 className="font-bold text-gray-900 text-base truncate uppercase tracking-tight group-hover:text-blue-600 transition-colors">{record.examId?.title || 'Unknown Exam'}</h3>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                                        <h3 className="font-bold text-text-primary text-base truncate uppercase tracking-tight group-hover:text-blue-600 transition-colors">{record.examId?.title || 'Unknown Exam'}</h3>
+                                        <p className="text-[10px] text-text-secondary font-bold uppercase tracking-widest mt-1">
                                             {new Date(record.submittedAt).toLocaleDateString()} at {new Date(record.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>
@@ -194,13 +198,13 @@ export default function StudentDashboard() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3 mb-6">
-                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 text-center shadow-sm">
-                                        <p className="text-[9px] text-gray-400 uppercase font-bold tracking-widest mb-1">Score</p>
-                                        <p className="text-lg font-bold text-blue-600 font-mono">{record.score} <span className="text-xs text-gray-400">/ {record.totalPossibleScore || record.totalQuestions}</span></p>
+                                    <div className="bg-background p-4 rounded-lg border border-border text-center shadow-sm">
+                                        <p className="text-[9px] text-text-secondary uppercase font-bold tracking-widest mb-1">Score</p>
+                                        <p className="text-lg font-bold text-blue-600 font-mono">{record.score} <span className="text-xs text-text-secondary/30">/ {record.totalPossibleScore || record.totalQuestions}</span></p>
                                     </div>
-                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 text-center shadow-sm">
-                                        <p className="text-[9px] text-gray-400 uppercase font-bold tracking-widest mb-1">Alerts</p>
-                                        <p className={`text-lg font-bold font-mono ${record.violations?.length > 0 ? 'text-red-500' : 'text-gray-300'}`}>{record.violations?.length || 0}</p>
+                                    <div className="bg-background p-4 rounded-lg border border-border text-center shadow-sm">
+                                        <p className="text-[9px] text-text-secondary uppercase font-bold tracking-widest mb-1">Alerts</p>
+                                        <p className={`text-lg font-bold font-mono ${record.violations?.length > 0 ? 'text-red-500' : 'text-text-secondary/30'}`}>{record.violations?.length || 0}</p>
                                     </div>
                                 </div>
 
@@ -209,7 +213,7 @@ export default function StudentDashboard() {
                                         setSelectedHistory(record);
                                         setShowReviewModal(true);
                                     }}
-                                    className="w-full bg-gray-50 text-gray-600 border border-gray-200 hover:bg-blue-600 hover:border-blue-600 hover:text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
+                                    className="w-full bg-surface text-text-primary border border-border hover:bg-blue-600 hover:border-blue-600 hover:text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
                                 >
                                     Review Report <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
                                 </button>
@@ -379,11 +383,4 @@ export default function StudentDashboard() {
             </AnimatePresence>
         </div>
     );
-}
-
-// Internal Icons for helper component
-function Shield({ size, className }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-    )
 }

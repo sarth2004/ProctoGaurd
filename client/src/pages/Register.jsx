@@ -35,10 +35,10 @@ export default function Register() {
                 className="w-full max-w-md bg-gray-50 rounded-xl p-8 border border-gray-200 shadow-2xl shadow-gray-200/50"
             >
                 <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                        Create Account
+                    <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                        Examix
                     </h2>
-                    <p className="text-gray-500 mt-2 text-sm uppercase tracking-wider font-semibold">Join the Exam Portal</p>
+                    <p className="text-gray-500 mt-2 text-sm uppercase tracking-wider font-semibold">Create your account</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">

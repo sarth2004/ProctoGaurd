@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Shield, AlertTriangle, CheckCircle2, ChevronRight, ChevronLeft, Play, Loader2, Bug } from 'lucide-react';
 import toast from 'react-hot-toast';
 import * as faceapi from 'face-api.js';
+import { useSocket } from '../context/SocketContext';
+import { useAuth } from '../context/AuthContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -13,6 +15,8 @@ export default function ExamPortal() {
     const navigate = useNavigate();
     const { examId } = useParams();
     const exam = state?.exam;
+    const socket = useSocket();
+    const { user } = useAuth();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
@@ -29,6 +33,17 @@ export default function ExamPortal() {
     const timerRef = useRef(null);
     const videoRef = useRef(null);
     const faceDetectionInterval = useRef(null);
+
+    // Emit join-exam event via Socket.IO
+    useEffect(() => {
+        if (socket && exam && user) {
+            socket.emit('join-exam', {
+                examId: exam._id,
+                examTitle: exam.title,
+                studentName: user.name,
+            });
+        }
+    }, [socket, exam, user]);
 
     // Load Face-API Models
     useEffect(() => {
@@ -139,6 +154,16 @@ export default function ExamPortal() {
             icon: '⚠️',
             style: { border: '1px solid #ef4444', padding: '16px', color: '#ef4444', background: '#000' }
         });
+        // Emit violation to admin via Socket.IO
+        if (socket) {
+            socket.emit('violation', {
+                examId: exam._id,
+                examTitle: exam.title,
+                studentName: user?.name,
+                violationType: type,
+                timestamp: new Date(),
+            });
+        }
     };
 
     // Tab Switching Detection
@@ -211,7 +236,8 @@ export default function ExamPortal() {
             for (const tc of publicTC) {
                 const res = await axios.post(`${API_URL}/api/exams/run-code`, {
                     code: studentCode,
-                    input: tc.input
+                    input: tc.input,
+                    language: currentQ.language || 'Python'
                 });
                 results.push({
                     passed: res.data.success && res.data.output.trim() === tc.output.trim(),
@@ -243,6 +269,14 @@ export default function ExamPortal() {
             });
             setResult(response.data);
             toast.success('Exam Submitted Successfully');
+            // Notify admin via Socket.IO
+            if (socket) {
+                socket.emit('exam-submitted', {
+                    examId: exam._id,
+                    examTitle: exam.title,
+                    studentName: user?.name,
+                });
+            }
         } catch (error) {
             toast.error('Submission Failed');
             setIsSubmitted(false); // Let them try again?
@@ -253,32 +287,32 @@ export default function ExamPortal() {
 
     if (isSubmitted && result) {
         return (
-            <div className="min-h-screen bg-white text-gray-900 flex items-center justify-center p-6">
+            <div className="min-h-screen bg-background text-text-primary flex items-center justify-center p-6">
                 <motion.div
                     initial={{ scale: 0.98, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="bg-gray-50 border border-gray-200 p-10 rounded-xl max-w-lg w-full text-center shadow-2xl shadow-gray-200/50"
+                    className="bg-surface border border-border p-10 rounded-xl max-w-lg w-full text-center shadow-2xl"
                 >
                     <div className="w-20 h-20 bg-green-600/5 text-green-600 rounded border border-green-600/10 flex items-center justify-center mx-auto mb-8 shadow-sm">
                         <CheckCircle2 size={40} />
                     </div>
-                    <h2 className="text-2xl font-bold mb-2 uppercase tracking-tight text-gray-900">Assessment Concluded</h2>
-                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-10">All responses have been securely archived.</p>
+                    <h2 className="text-2xl font-bold mb-2 uppercase tracking-tight text-text-primary">Assessment Concluded</h2>
+                    <p className="text-text-secondary text-xs font-bold uppercase tracking-widest mb-10">All responses have been securely archived.</p>
 
-                    <div className="bg-white p-8 rounded-xl border border-gray-200 mb-10 grid grid-cols-2 gap-8 text-center shadow-sm">
+                    <div className="bg-background p-8 rounded-xl border border-border mb-10 grid grid-cols-2 gap-8 text-center shadow-sm">
                         <div>
-                            <p className="text-gray-400 text-[9px] uppercase tracking-widest font-bold mb-2">Final Evaluation</p>
-                            <p className="text-3xl font-bold text-blue-600 font-mono">{result.score} <span className="text-sm text-gray-300">/ {result.totalQuestions}</span></p>
+                            <p className="text-text-secondary text-[9px] uppercase tracking-widest font-bold mb-2">Final Evaluation</p>
+                            <p className="text-3xl font-bold text-blue-600 font-mono">{result.score} <span className="text-sm text-text-secondary/30">/ {result.totalQuestions}</span></p>
                         </div>
                         <div>
-                            <p className="text-gray-400 text-[9px] uppercase tracking-widest font-bold mb-2">Integrity Status</p>
+                            <p className="text-text-secondary text-[9px] uppercase tracking-widest font-bold mb-2">Integrity Status</p>
                             <p className={`text-xl font-bold uppercase tracking-tight ${result.status === 'Pass' ? 'text-green-600' : 'text-red-600'}`}>{result.status}</p>
                         </div>
                     </div>
 
                     <button
                         onClick={() => navigate('/student/dashboard')}
-                        className="w-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-sm"
+                        className="w-full bg-surface text-text-primary border border-border hover:bg-background py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-sm"
                     >
                         Return to Control Panel
                     </button>
@@ -290,18 +324,23 @@ export default function ExamPortal() {
     const currentQuestion = exam.questions[currentQuestionIndex];
 
     return (
-        <div className="min-h-screen bg-white text-gray-900 flex flex-col">
+        <div className="min-h-screen bg-background text-text-primary flex flex-col">
             {/* Exam Header */}
-            <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 px-8 py-5 flex justify-between items-center z-40 shadow-xl shadow-gray-200/20">
-                <div className="flex items-center gap-6">
+        <header className="fixed top-0 left-0 right-0 bg-surface border-b border-border px-8 py-5 flex justify-between items-center z-40 shadow-xl shadow-black/5">
+                <div className="flex items-center gap-6 flex-1">
                     <div className="bg-blue-600/5 text-blue-600 border border-blue-600/10 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-[0.2em] shadow-sm">
                         Live Protocol
                     </div>
-                    <div className="h-4 w-[1px] bg-gray-100" />
-                    <h1 className="text-sm font-bold text-gray-900 uppercase tracking-tight truncate max-w-[200px] md:max-w-md">{exam.title}</h1>
+                    <div className="h-4 w-[1px] bg-border" />
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-tight truncate max-w-[200px] md:max-w-[180px]">{exam.title}</p>
                 </div>
 
-                <div className="flex items-center gap-8">
+                {/* Centered Examix logo */}
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <span className="text-xl font-extrabold text-text-primary uppercase tracking-widest">Examix</span>
+                </div>
+
+                <div className="flex items-center gap-8 flex-1 justify-end">
                     <div className="flex items-center gap-3 bg-red-600/5 text-red-600 px-5 py-2.5 rounded-lg border border-red-600/10 shadow-sm transition-all hover:bg-red-600/10">
                         <Clock size={16} />
                         <span className="font-mono text-2xl font-bold tracking-tight">{formatTime(timeLeft)}</span>
@@ -323,13 +362,13 @@ export default function ExamPortal() {
                             key={currentQuestionIndex}
                             initial={{ x: 10, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
-                            className="bg-gray-50 border border-gray-200 p-10 rounded-xl shadow-xl shadow-gray-200/30"
+                            className="bg-surface border border-border p-10 rounded-xl shadow-xl shadow-black/5"
                         >
                             <div className="mb-10">
                                 <div className="flex justify-between items-center mb-6">
-                                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">Matrix Entry {currentQuestionIndex + 1} / {exam.questions.length}</p>
+                                    <p className="text-text-secondary text-[10px] font-bold uppercase tracking-[0.2em]">Matrix Entry {currentQuestionIndex + 1} / {exam.questions.length}</p>
                                     <div className="flex gap-3">
-                                        <span className="bg-white border border-gray-200 text-[10px] font-bold px-3 py-1 rounded text-gray-400 uppercase tracking-widest shadow-sm">{currentQuestion.type || 'MCQ'}</span>
+                                        <span className="bg-background border border-border text-[10px] font-bold px-3 py-1 rounded text-text-secondary uppercase tracking-widest shadow-sm">{currentQuestion.type || 'MCQ'}</span>
                                         <span className="bg-blue-600/5 border border-blue-600/10 text-[10px] font-bold px-3 py-1 rounded text-blue-600 uppercase tracking-widest shadow-sm">{currentQuestion.weightage || 1} Marks</span>
                                     </div>
                                 </div>
@@ -351,7 +390,9 @@ export default function ExamPortal() {
                                         <div className="flex justify-between items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                                                <label className="text-[10px] text-gray-400 uppercase font-bold tracking-[0.2em]">Python Syntax Processor (3.x)</label>
+                                                <label className="text-[10px] text-gray-400 uppercase font-bold tracking-[0.2em]">
+                                                    {currentQuestion.language || 'Python'} Syntax Processor (v1.0)
+                                                </label>
                                             </div>
                                             <button
                                                 onClick={handleRunCode}
